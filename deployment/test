@@ -1,0 +1,81 @@
+rm ~/.kube/config
+aws eks --region us-east-1 update-kubeconfig --name existing-vpc
+kubectl get nodes
+
+kubectl apply -f aws-secret.yaml
+kubectl apply -f env-secret.yaml
+kubectl apply -f env-configmap.yaml
+
+kubectl apply -f backend-feed-deployment.yaml
+kubectl apply -f backend-user-deployment.yaml
+kubectl apply -f frontend-deployment.yaml
+kubectl apply -f reverseproxy-deployment.yaml
+
+
+kubectl apply -f backend-feed-service.yaml
+kubectl apply -f backend-user-service.yaml
+kubectl apply -f frontend-service.yaml
+kubectl apply -f reverseproxy-service.yaml
+
+kubectl expose deployment frontend --type=LoadBalancer --name=publicfrontend
+kubectl expose deployment reverseproxy --type=LoadBalancer --name=publicreverseproxy
+
+
+kubectl delete service backend-feed
+kubectl delete deployment backend-feed
+kubectl delete service backend-user
+kubectl delete deployment backend-user
+kubectl delete service frontend
+kubectl delete deployment frontend
+kubectl delete service reverseproxy
+kubectl delete deployment reverseproxy
+
+
+docker build . -t thientnq/udagram-frontend:v3
+docker push thientnq/udagram-frontend:v3
+
+kubectl set image deployment reverseproxy reverseproxy=thientnq/udagram-reverseproxy:v1
+
+kubectl exec --stdin --tty frontend-667d4db969-nztl2 -- /bin/bash
+
+curl backend-feed-857c46c78-4r4q2:8080/api/v0/feed
+
+kubectl autoscale deployment backend-feed --cpu-percent=80 --min=1 --max=3
+
+kubectl get hpa
+
+kubectl delete hpa backend-feed
+
+kubectl get services 
+kubectl get pods # It should show the STATUS as Running
+kubectl describe pod
+
+kubectl describe services my-service
+
+curl http://<external-ip>:<port>
+
+curl http://backend-feed:8180/api/v0/feed
+
+curl a01c99cd86c97457c9d48b490b75b2b2-1683176714.us-east-1.elb.amazonaws.com:8180/api/v0/feed
+
+publicfrontend          af186ebfacec04fe4bdfad2ba76e4a4c-421238251.us-east-1.elb.amazonaws.com    8100:32516/TCP   7h31m
+publicreverseproxy       ac4fb184033aa48579fa11f26c33b002-260501371.us-east-1.elb.amazonaws.com 
+
+
+docker build . -t thientnq/udagram-reverseproxy:v3
+docker push thientnq/udagram-reverseproxy:v3
+kubectl set image deployment reverseproxy reverseproxy=thientnq/udagram-reverseproxy:v3
+
+kubectl exec -it frontend-667d4db969-lpzkb bash
+
+kubectl logs backend-feed-7d959569dd-h6t5d 
+
+client 10.0.17.238
+curl http://backend-feed:8180/api/v0/feed
+
+
+    
+    eksctl create cluster --name myUdacityP3Cluster --region=us-east-1 --nodes-min=2 --nodes-max=3  --node-type m5.large \
+      --nodegroup-name udacityNg
+
+      eksctl utils update-cluster-logging --enable-types={SPECIFY-YOUR-LOG-TYPES-HERE (e.g. all)} --region=us-east-1 --cluster=myUdacityP3Cluster
