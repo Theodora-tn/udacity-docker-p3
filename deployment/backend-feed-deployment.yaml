@@ -15,7 +15,7 @@ spec:
         service: backend-feed
     spec:
       containers:
-      - image: thientnq/udagram-api-feed:v1
+      - image: thientnq/udagram-api-feed:v3aws
         name: backend-feed 
         resources:
           requests:

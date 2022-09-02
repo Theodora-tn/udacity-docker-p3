@@ -11,9 +11,11 @@ kubectl apply -f backend-user-deployment.yaml
 kubectl apply -f frontend-deployment.yaml
 kubectl apply -f reverseproxy-deployment.yaml
 
-
+kubectl apply -f backend-feed-deployment.yaml
+kubectl apply -f backend-user-deployment.yaml
 kubectl apply -f backend-feed-service.yaml
 kubectl apply -f backend-user-service.yaml
+
 kubectl apply -f frontend-service.yaml
 kubectl apply -f reverseproxy-service.yaml
 
@@ -34,13 +36,11 @@ kubectl delete deployment reverseproxy
 docker build . -t thientnq/udagram-frontend:v3
 docker push thientnq/udagram-frontend:v3
 
-kubectl set image deployment reverseproxy reverseproxy=thientnq/udagram-reverseproxy:v1
-
-kubectl exec --stdin --tty frontend-667d4db969-nztl2 -- /bin/bash
+kubectl set image deployment frontend frontend=thientnq/udagram-frontend:v1
 
 curl backend-feed-857c46c78-4r4q2:8080/api/v0/feed
 
-kubectl autoscale deployment backend-feed --cpu-percent=80 --min=1 --max=3
+kubectl autoscale deployment reverseproxy --cpu-percent=70 --min=1 --max=2
 
 kubectl get hpa
 
@@ -58,24 +58,32 @@ curl http://backend-feed:8180/api/v0/feed
 
 curl a01c99cd86c97457c9d48b490b75b2b2-1683176714.us-east-1.elb.amazonaws.com:8180/api/v0/feed
 
-publicfrontend          af186ebfacec04fe4bdfad2ba76e4a4c-421238251.us-east-1.elb.amazonaws.com    8100:32516/TCP   7h31m
-publicreverseproxy       ac4fb184033aa48579fa11f26c33b002-260501371.us-east-1.elb.amazonaws.com 
+publicfrontend          a221344dd66cf46989d9c91b79e9186e-180898627.us-east-1.elb.amazonaws.com    80:31440/TCP     6h33m
+publicreverseproxy      a01c99cd86c97457c9d48b490b75b2b2-1683176714.us-east-1.elb.amazonaws.com 
 
 
-docker build . -t thientnq/udagram-reverseproxy:v3
-docker push thientnq/udagram-reverseproxy:v3
-kubectl set image deployment reverseproxy reverseproxy=thientnq/udagram-reverseproxy:v3
+docker build . -t thientnq/udagram-frontend:v8
+docker push thientnq/udagram-frontend:v8
+kubectl set image deployment frontend frontend=thientnq/udagram-frontend:v8
 
-kubectl exec -it frontend-667d4db969-lpzkb bash
+kubectl exec -it frontend-6f5c6c5b59-ww2qv bash
 
-kubectl logs backend-feed-7d959569dd-h6t5d 
+kubectl logs backend-feed-9b9fc9968-h24qc 
 
 client 10.0.17.238
-curl http://backend-feed:8180/api/v0/feed
+curl http://localhost:8180/api/v0/feed
 
 
-    
-    eksctl create cluster --name myUdacityP3Cluster --region=us-east-1 --nodes-min=2 --nodes-max=3  --node-type m5.large \
-      --nodegroup-name udacityNg
+kubectl exec -it reverseproxy-74d6b985d5-kskpx sh
 
-      eksctl utils update-cluster-logging --enable-types={SPECIFY-YOUR-LOG-TYPES-HERE (e.g. all)} --region=us-east-1 --cluster=myUdacityP3Cluster
+kubectl exec --stdin --tty reverseproxy-74d6b985d5-kskpx --/bin/bash
+# See what values are set for environment variables in the container
+printenv | grep POST
+
+http://a01c99cd86c97457c9d48b490b75b2b2-1683176714.us-east-1.elb.amazonaws.com:8180/api/v0/feed
+
+kubectl rollout restart deployment frontend
+
+docker image prune --all
+
+docker-compose -f docker-compose-build.yaml build --parallel

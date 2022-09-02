@@ -9,4 +9,4 @@ data:
   AWS_REGION: us-east-1
   AWS_PROFILE: p3udacity
   JWT_SECRET: hello
-  URL: http://a221344dd66cf46989d9c91b79e9186e-180898627.us-east-1.elb.amazonaws.com:8100
+  URL: http://a221344dd66cf46989d9c91b79e9186e-180898627.us-east-1.elb.amazonaws.com:80
