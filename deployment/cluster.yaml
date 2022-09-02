@@ -1,0 +1,25 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: existing-vpc
+  region: us-east-1
+  version: "1.21"
+vpc:
+  id: vpc-0cd70da253365a731
+  subnets:
+    private:
+      us-east-1a:
+        id: subnet-05274d6a7015a3e82
+      us-east-1b:
+        id: subnet-0a3918fd5e20867de
+    public:
+      us-east-1a:
+        id: subnet-07c388dd210b105e9
+      us-east-1b:
+        id: subnet-080a5c710ae0355bd
+managedNodeGroups:
+- name: udacity-p3-ng
+  privateNetworking: true
+  instanceType: m5.large
+  desiredCapacity: 2
+    

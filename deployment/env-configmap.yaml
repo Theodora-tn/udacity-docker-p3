@@ -1,0 +1,12 @@
+kind: ConfigMap 
+apiVersion: v1 
+metadata:
+  name: env-configmap 
+data:
+  POSTGRESS_DB: postgres
+  POSTGRESS_HOST: db-udacity-p3.c4ablgoirek5.us-east-1.rds.amazonaws.com
+  AWS_BUCKET: thien-udacity-p3-bucket  
+  AWS_REGION: us-east-1
+  AWS_PROFILE: p3udacity
+  JWT_SECRET: hello
+  URL: http://a221344dd66cf46989d9c91b79e9186e-180898627.us-east-1.elb.amazonaws.com:8100
