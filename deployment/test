@@ -66,7 +66,7 @@ docker build . -t thientnq/udagram-frontend:v8
 docker push thientnq/udagram-frontend:v8
 kubectl set image deployment frontend frontend=thientnq/udagram-frontend:v8
 
-kubectl exec -it frontend-6f5c6c5b59-ww2qv bash
+kubectl exec -it frontend-8764cf697-xl9bj bash
 
 kubectl logs backend-feed-9b9fc9968-h24qc 
 
@@ -74,7 +74,7 @@ client 10.0.17.238
 curl http://localhost:8180/api/v0/feed
 
 
-kubectl exec -it reverseproxy-74d6b985d5-kskpx sh
+kubectl exec -it backend-feed-5b9947d7bc-nlg6p sh
 
 kubectl exec --stdin --tty reverseproxy-74d6b985d5-kskpx --/bin/bash
 # See what values are set for environment variables in the container
