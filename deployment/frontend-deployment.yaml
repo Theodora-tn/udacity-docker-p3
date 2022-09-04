@@ -16,7 +16,7 @@ spec:
         api: external        
     spec:
       containers:
-      - image: thientnq/udagram-frontend:v2ori
+      - image: thientnq/udagram-frontend:v5aws
         name: frontend       
         ports:
         - containerPort: 8100  

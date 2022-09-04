@@ -9,4 +9,4 @@ data:
   AWS_REGION: us-east-1
   AWS_PROFILE: udacityp3
   JWT_SECRET: hello
-  URL:  a641213224c3a40dabc6e44e734e2a4d-375368568.us-east-1.elb.amazonaws.com:8100
+  URL: http://a575be843a79d4f4fbe67727c43c0dd4-875089832.us-east-1.elb.amazonaws.com:80

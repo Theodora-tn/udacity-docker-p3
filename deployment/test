@@ -40,7 +40,7 @@ kubectl set image deployment frontend frontend=thientnq/udagram-frontend:v1
 
 curl backend-feed-857c46c78-4r4q2:8080/api/v0/feed
 
-kubectl autoscale deployment reverseproxy --cpu-percent=70 --min=1 --max=2
+kubectl autoscale deployment backend-user --cpu-percent=70 --min=1 --max=2
 
 kubectl get hpa
 
@@ -87,3 +87,5 @@ kubectl rollout restart deployment frontend
 docker image prune --all
 
 docker-compose -f docker-compose-build.yaml build --parallel
+
+kubectl scale deployment frontend --replicas= 
