@@ -58,8 +58,8 @@ curl http://backend-feed:8180/api/v0/feed
 
 curl a01c99cd86c97457c9d48b490b75b2b2-1683176714.us-east-1.elb.amazonaws.com:8180/api/v0/feed
 
-publicfrontend       LoadBalancer   172.20.171.25    a641213224c3a40dabc6e44e734e2a4d-375368568.us-east-1.elb.amazonaws.com   8100:31202/TCP   25m
-publicreverseproxy   LoadBalancer   172.20.134.100   a683bdf3f5e9e437185f5cf539661221-37112074.us-east-1.elb.amazonaws.com    8180:30597/T
+publicfrontend       a575be843a79d4f4fbe67727c43c0dd4-875089832.us-east-1.elb.amazonaws.com   8100:31202/TCP   25m
+publicreverseproxy     a683bdf3f5e9e437185f5cf539661221-37112074.us-east-1.elb.amazonaws.com    8180:30597/T
 
 
 docker build . -t thientnq/udagram-frontend:v8
@@ -88,4 +88,4 @@ docker image prune --all
 
 docker-compose -f docker-compose-build.yaml build --parallel
 
-kubectl scale deployment frontend --replicas= 
+kubectl scale deployment backend-user --replicas=2
