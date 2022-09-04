@@ -19,7 +19,7 @@ kubectl apply -f backend-user-service.yaml
 kubectl apply -f frontend-service.yaml
 kubectl apply -f reverseproxy-service.yaml
 
-kubectl expose deployment frontend --type=LoadBalancer --name=publicfrontend
+kubectl expose deployment frontend --type=LoadBalancer --name=publicfrontend --port=80
 kubectl expose deployment reverseproxy --type=LoadBalancer --name=publicreverseproxy
 
 
@@ -58,8 +58,8 @@ curl http://backend-feed:8180/api/v0/feed
 
 curl a01c99cd86c97457c9d48b490b75b2b2-1683176714.us-east-1.elb.amazonaws.com:8180/api/v0/feed
 
-publicfrontend          a221344dd66cf46989d9c91b79e9186e-180898627.us-east-1.elb.amazonaws.com    80:31440/TCP     6h33m
-publicreverseproxy      a01c99cd86c97457c9d48b490b75b2b2-1683176714.us-east-1.elb.amazonaws.com 
+publicfrontend       LoadBalancer   172.20.171.25    a641213224c3a40dabc6e44e734e2a4d-375368568.us-east-1.elb.amazonaws.com   8100:31202/TCP   25m
+publicreverseproxy   LoadBalancer   172.20.134.100   a683bdf3f5e9e437185f5cf539661221-37112074.us-east-1.elb.amazonaws.com    8180:30597/T
 
 
 docker build . -t thientnq/udagram-frontend:v8
@@ -74,7 +74,7 @@ client 10.0.17.238
 curl http://localhost:8180/api/v0/feed
 
 
-kubectl exec -it backend-feed-5b9947d7bc-nlg6p sh
+kubectl exec -it frontend-7bd9d8fd77-ltwx2 sh
 
 kubectl exec --stdin --tty reverseproxy-74d6b985d5-kskpx --/bin/bash
 # See what values are set for environment variables in the container

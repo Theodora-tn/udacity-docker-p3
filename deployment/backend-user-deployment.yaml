@@ -15,7 +15,7 @@ spec:
         service: backend-user
     spec:
       containers:
-      - image: thientnq/udagram-api-user:v3aws
+      - image: thientnq/udagram-api-user:v2ori
         name: backend-user
         resources:
           requests:
